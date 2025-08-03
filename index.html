@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alışveriş Listesi Uygulaması</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .input-section {
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .input-group button {
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .input-group button:hover {
+            transform: translateY(-2px);
+        }
+
+        .list-section {
+            padding: 30px;
+        }
+
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .list-header h2 {
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .clear-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .clear-btn:hover {
+            background: #c82333;
+        }
+
+        .shopping-list {
+            list-style: none;
+        }
+
+        .shopping-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .shopping-list li:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .item-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .item-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .item-text {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .item-text.completed {
+            text-decoration: line-through;
+            color: #6c757d;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .edit-btn, .delete-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .edit-btn:hover {
+            background: #e0a800;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .stats {
+            background: #e9ecef;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            .item-actions {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛒 Alışveriş Listesi</h1>
+            <p>Alışveriş listenizi organize edin ve takip edin</p>
+        </div>
+
+        <div class="input-section">
+            <div class="input-group">
+                <input type="text" id="itemInput" placeholder="Alışveriş listesine eklenecek ürünü yazın..." maxlength="50">
+                <button onclick="addItem()">Ekle</button>
+            </div>
+        </div>
+
+        <div class="list-section">
+            <div class="list-header">
+                <h2>Alışveriş Listem</h2>
+                <button class="clear-btn" onclick="clearAll()">Tümünü Temizle</button>
+            </div>
+
+            <ul id="shoppingList" class="shopping-list">
+                <!-- Örnek öğeler -->
+                <li>
+                    <div class="item-info">
+                        <input type="checkbox" class="item-checkbox" onchange="toggleComplete(this)">
+                        <span class="item-text">Süt</span>
+                    </div>
+                    <div class="item-actions">
+                        <button class="edit-btn" onclick="editItem(this)">Düzenle</button>
+                        <button class="delete-btn" onclick="deleteItem(this)">Sil</button>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-info">
+                        <input type="checkbox" class="item-checkbox" onchange="toggleComplete(this)">
+                        <span class="item-text">Ekmek</span>
+                    </div>
+                    <div class="item-actions">
+                        <button class="edit-btn" onclick="editItem(this)">Düzenle</button>
+                        <button class="delete-btn" onclick="deleteItem(this)">Sil</button>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-info">
+                        <input type="checkbox" class="item-checkbox" onchange="toggleComplete(this)">
+                        <span class="item-text">Elma</span>
+                    </div>
+                    <div class="item-actions">
+                        <button class="edit-btn" onclick="editItem(this)">Düzenle</button>
+                        <button class="delete-btn" onclick="deleteItem(this)">Sil</button>
+                    </div>
+                </li>
+            </ul>
+
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <div>📝</div>
+                <h3>Alışveriş listeniz boş</h3>
+                <p>Yukarıdaki kutucuğa ürün ekleyerek başlayın!</p>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-number" id="totalItems">3</span>
+                <span>Toplam Ürün</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="completedItems">0</span>
+                <span>Tamamlanan</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="remainingItems">3</span>
+                <span>Kalan</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Alışveriş listesi fonksiyonları
+        function addItem() {
+            const input = document.getElementById('itemInput');
+            const itemText = input.value.trim();
+            
+            if (itemText === '') {
+                alert('Lütfen bir ürün adı girin!');
+                return;
+            }
+
+            const list = document.getElementById('shoppingList');
+            const li = document.createElement('li');
+            
+            li.innerHTML = `
+                <div class="item-info">
+                    <input type="checkbox" class="item-checkbox" onchange="toggleComplete(this)">
+                    <span class="item-text">${itemText}</span>
+                </div>
+                <div class="item-actions">
+                    <button class="edit-btn" onclick="editItem(this)">Düzenle</button>
+                    <button class="delete-btn" onclick="deleteItem(this)">Sil</button>
+                </div>
+            `;
+            
+            list.appendChild(li);
+            input.value = '';
+            updateStats();
+            checkEmptyState();
+        }
+
+        function deleteItem(button) {
+            if (confirm('Bu ürünü silmek istediğinizden emin misiniz?')) {
+                button.closest('li').remove();
+                updateStats();
+                checkEmptyState();
+            }
+        }
+
+        function editItem(button) {
+            const li = button.closest('li');
+            const textSpan = li.querySelector('.item-text');
+            const currentText = textSpan.textContent;
+            
+            const newText = prompt('Ürün adını düzenleyin:', currentText);
+            
+            if (newText !== null && newText.trim() !== '') {
+                textSpan.textContent = newText.trim();
+            }
+        }
+
+        function toggleComplete(checkbox) {
+            const textSpan = checkbox.nextElementSibling;
+            if (checkbox.checked) {
+                textSpan.classList.add('completed');
+            } else {
+                textSpan.classList.remove('completed');
+            }
+            updateStats();
+        }
+
+        function clearAll() {
+            if (confirm('Tüm alışveriş listesini temizlemek istediğinizden emin misiniz?')) {
+                const list = document.getElementById('shoppingList');
+                list.innerHTML = '';
+                updateStats();
+                checkEmptyState();
+            }
+        }
+
+        function updateStats() {
+            const items = document.querySelectorAll('#shoppingList li');
+            const completedItems = document.querySelectorAll('#shoppingList li .item-checkbox:checked');
+            
+            document.getElementById('totalItems').textContent = items.length;
+            document.getElementById('completedItems').textContent = completedItems.length;
+            document.getElementById('remainingItems').textContent = items.length - completedItems.length;
+        }
+
+        function checkEmptyState() {
+            const list = document.getElementById('shoppingList');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (list.children.length === 0) {
+                emptyState.style.display = 'block';
+            } else {
+                emptyState.style.display = 'none';
+            }
+        }
+
+        // Enter tuşu ile ürün ekleme
+        document.getElementById('itemInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addItem();
+            }
+        });
+
+        // Sayfa yüklendiğinde istatistikleri güncelle
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+            checkEmptyState();
+        });
+    </script>
+</body>
+</html> 
