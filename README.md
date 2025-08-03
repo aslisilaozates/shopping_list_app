@@ -49,20 +49,6 @@ shopping_list_app/
 - **Hover Efektleri**: Butonlar ve liste öğelerinde etkileşimli efektler
 - **Temiz Tipografi**: Okunabilir ve modern font kullanımı
 
-## 🔧 Gelecek Özellikler
 
-- [ ] Kategoriler (Meyve, Sebze, Temizlik vb.)
-- [ ] Fiyat takibi
-- [ ] Yerel depolama (localStorage)
-- [ ] Çoklu liste desteği
-- [ ] Paylaşım özelliği
 
-## 📞 Destek
 
-Herhangi bir sorun yaşarsanız veya önerileriniz varsa, lütfen iletişime geçin.
-
----
-
-**Geliştirici**: AI Assistant  
-**Sürüm**: 1.0  
-**Son Güncelleme**: 2024 
